@@ -209,16 +209,16 @@ display specific error messages in the error template based on this error "reaso
 use the appropriate error controller eg. `ErrorController` to display a message based on the 
 error message properties. For example,
 
-```app/router.js
-App.ErrorRoute = Ember.Route.extend({
+```app/routes/error.js
+export default Ember.Route.extend({
   setupController: function(controller, model, params) {
     controller.set('model', model);
   }
 });
 ```
 
-```app/controllers/errorController.js
-App.ErrorController = Ember.ObjectController.extend({
+```app/controllers/error.js
+export default Ember.ObjectController.extend({
   is404: function() {
     return this.get('model.message') === 404;
   }.property('model.message'),
