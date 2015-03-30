@@ -191,7 +191,7 @@ to that error state as its `model`. For example, here we are rejecting a
 promise with the HTTP response code as the error message:
 
 ```js
-reject({"message": response.status})
+  reject({"message": response.status})
 ```
 
 `message` is an arbitrary key and you can use whatever is appropriate for your application.
@@ -200,7 +200,7 @@ or number, for example a response code, then the reason will not bubble up to th
 the model will be `null`. The following would result in a `null` model:
 
 ```js
-reject(404) // don't do this
+  reject(404) // don't do this
 ```
 
 This error "reason" will be passed to the error route available to the app and
@@ -209,43 +209,45 @@ display specific error messages in the error template based on this error "reaso
 use the appropriate error controller eg. `ErrorController` to display a message based on the 
 error message properties. For example,
 
-```js
+```app/router.js
 App.ErrorRoute = Ember.Route.extend({
-
-    setupController: function(controller, model, params) {
-        controller.set('model', model);
-    }
-
+  setupController: function(controller, model, params) {
+    controller.set('model', model);
+  }
 });
 ```
 
-```js
+```app/controllers/errorController.js
 App.ErrorController = Ember.ObjectController.extend({
-
-    is404: function() {
-        return this.get('model.message') === 404;
-    }.property('model.message'),
-
-    is500: function() {
-        return this.get('model.message') === 500;
-    }.property('model.message'),
-
-    isGeneralError: function() {
-        return this.get('model.message') !== 404 && this.get('model.message') !== 500;
-    }.property('model.message')
+  is404: function() {
+    return this.get('model.message') === 404;
+  }.property('model.message'),
+  
+  is500: function() {
+    return this.get('model.message') === 500;
+  }.property('model.message'),
+  
+  isGeneralError: function() {
+    return this.get('model.message') !== 404 && this.get('model.message') !== 500;
+  }.property('model.message')
 
 });
 ```
 ```app/templates/error.hbs
-{{!-- error template --}}
 {{#if is404}}
-    <div>Sorry, couldn't find what you were looking for.</div>
+  <div>
+    Sorry, couldn't find what you were looking for.
+  </div>
 {{/if}}
 {{#if is500}}
-    <div>Something went wrong, please try again.</div>
+  <div>
+    Something went wrong, please try again.
+  </div>
 {{/if}}
 {{#if isGeneralError}}
-    <div>The application encountered an error.</div>
+  <div>
+    The application encountered an error.
+  </div>
 {{/if}}
 ```
 
