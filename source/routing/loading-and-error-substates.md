@@ -219,17 +219,18 @@ export default Ember.Route.extend({
 
 ```app/controllers/error.js
 export default Ember.ObjectController.extend({
-  is404: function() {
+  
+  is404: Ember.computed('model.message', function() {
     return this.get('model.message') === 404;
-  }.property('model.message'),
-  
-  is500: function() {
+  }),
+
+  is500: Ember.computed('model.message', function() {
     return this.get('model.message') === 500;
-  }.property('model.message'),
-  
-  isGeneralError: function() {
+  }),
+
+  isGeneralError: Ember.computed('model.message', function() {
     return this.get('model.message') !== 404 && this.get('model.message') !== 500;
-  }.property('model.message')
+  })
 
 });
 ```
