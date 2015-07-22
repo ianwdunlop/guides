@@ -194,6 +194,23 @@ promise with the HTTP response code as the error message:
   reject({"message": response.status})
 ```
 
+This will generally be in the promise `failure` hook inside the code which finds your data.
+For example, here we fetch some data with a promise and either `resolve` it if successful or `reject` if it fails.
+
+```js
+var promise = fetchSomeData(); \\ an Ember.RSVP.Promise
+
+promise.then(success, fail);
+
+function success(response) {
+  resolve(response);
+}
+
+function fail(response) {
+  reject({"message": response.status)};
+}
+```
+
 `message` is an arbitrary key and you can use whatever is appropriate for your application.
 It is important that the reject contains an `object`. If you only reject with a textual value
 or number, for example a response code, then the reason will not bubble up to the route and 
@@ -203,19 +220,10 @@ the model will be `null`. The following would result in a `null` model:
   reject(404) // don't do this
 ```
 
-This error "reason" will be passed to the error route available to the app and
-can then be set as the error controllers model via the routes `setupController` method. You can then
-display specific error messages in the error template based on this error "reason". You can
-use the appropriate error controller eg. `ErrorController` to display a message based on the 
-error message properties. For example,
-
-```app/routes/error.js
-export default Ember.Route.extend({
-  setupController: function(controller, model, params) {
-    controller.set('model', model);
-  }
-});
-```
+This error "reason" will be passed to the `ErrorRoute` available to the app. By default Ember will
+set this error object as the model in the `ErrorController`. You can then display specific error messages in the error 
+template based on this error "reason". You can use the appropriate error controller eg. the apps general `ErrorController`
+to display a message based on the error message properties. For example,
 
 ```app/controllers/error.js
 export default Ember.ObjectController.extend({
